@@ -13,7 +13,7 @@ import routerProvider from "@pankod/refine-react-router-v6";
 import { dataProvider, liveProvider } from "@pankod/refine-supabase";
 import { supabaseClient } from "utility";
 import authProvider from "./authProvider";
-import { PaymentList } from "pages/payment";
+import { PaymentEdit, PaymentList } from "pages/payment";
 
 function App() {
   return (
@@ -29,6 +29,7 @@ function App() {
         {
           name: "Payment",
           list: PaymentList,
+          edit: PaymentEdit,
         },
       ]}
       routerProvider={{
