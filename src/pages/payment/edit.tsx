@@ -10,6 +10,7 @@ import {
   Input,
   ListButton,
   RefreshButton,
+  Select,
   useForm,
 } from "@pankod/refine-antd";
 import { IPayment } from "interfaces";
@@ -67,6 +68,28 @@ export const PaymentEdit: React.FC<IResourceComponentsProps> = () => {
           ]}
         >
           <Input />
+        </Form.Item>
+        <Form.Item
+          label="Currency"
+          name="currency"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
+          <Select
+            options={[
+              {
+                label: "USD",
+                value: "USD",
+              },
+              {
+                label: "GBP",
+                value: "GBP",
+              },
+            ]}
+          />
         </Form.Item>
         <Form.Item
           label="Date of payment"
