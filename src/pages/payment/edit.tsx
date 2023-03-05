@@ -11,6 +11,7 @@ import {
   ListButton,
   RefreshButton,
   Select,
+  Switch,
   useForm,
 } from "@pankod/refine-antd";
 import { IPayment } from "interfaces";
@@ -165,6 +166,20 @@ export const PaymentEdit: React.FC<IResourceComponentsProps> = () => {
           ]}
         >
           <Input disabled />
+        </Form.Item>
+        <Form.Item
+          label="Archived?"
+          name="archived"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
+          <Switch
+            checkedChildren="Archived"
+            unCheckedChildren="Active"
+          />
         </Form.Item>
       </Form>
     </Edit>
