@@ -14,7 +14,7 @@ import { dataProvider, liveProvider } from "@pankod/refine-supabase";
 import { ApolloProvider } from "@apollo/client";
 import { supabaseClient, apolloClient } from "utility";
 import authProvider from "./authProvider";
-import { PaymentEdit, PaymentList } from "pages/payment";
+import { PaymentCreate, PaymentEdit, PaymentList } from "pages/payment";
 
 function App() {
   return (
@@ -32,6 +32,7 @@ function App() {
             name: "Payment",
             list: PaymentList,
             edit: PaymentEdit,
+            create: PaymentCreate,
           },
         ]}
         routerProvider={{

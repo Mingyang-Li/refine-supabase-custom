@@ -1,35 +1,24 @@
-import React, { useState } from "react";
 import { IResourceComponentsProps } from "@pankod/refine-core";
-
 import {
-  Alert,
-  Button,
+  Create,
   DatePicker,
-  Edit,
   Form,
   Input,
-  ListButton,
-  RefreshButton,
+  InputNumber,
   Select,
   useForm,
 } from "@pankod/refine-antd";
 import { IPayment } from "interfaces";
-import dayjs from "dayjs";
-import { useQuery } from "@apollo/client";
 import {
   UNIQUE_PAYMENT_CURRENCIES,
   UNIQUE_PAYMENT_STATUSES,
 } from "graphql/queries";
 import { Query } from "generated/graphql";
+import { useQuery } from "@apollo/client";
+import dayjs from "dayjs";
 
-export const PaymentEdit: React.FC<IResourceComponentsProps> = () => {
-  const [isDeprecated, setIsDeprecated] = useState(false);
-  const { formProps, saveButtonProps, queryResult } = useForm<IPayment>({
-    liveMode: "manual",
-    onLiveEvent: () => {
-      setIsDeprecated(true);
-    },
-  });
+export const PaymentCreate: React.FC<IResourceComponentsProps> = () => {
+  const { formProps, saveButtonProps } = useForm<IPayment>();
   const { data: currencies } = useQuery<Query>(UNIQUE_PAYMENT_CURRENCIES);
   const { data: statuses } = useQuery<Query>(UNIQUE_PAYMENT_STATUSES);
   const uniqueCurrencies = currencies?.uniquePaymentCurrencies.map((d) => ({
@@ -42,38 +31,8 @@ export const PaymentEdit: React.FC<IResourceComponentsProps> = () => {
     value: d.status,
   }));
 
-  const handleRefresh = () => {
-    queryResult?.refetch();
-    setIsDeprecated(false);
-  };
-
   return (
-    <Edit
-      saveButtonProps={saveButtonProps}
-      headerProps={{
-        extra: (
-          <>
-            <ListButton />
-            <RefreshButton onClick={handleRefresh} />
-          </>
-        ),
-      }}
-    >
-      {isDeprecated && (
-        <Alert
-          message="This payment is changed. Reload to see it's latest version."
-          type="warning"
-          style={{
-            marginBottom: 20,
-          }}
-          action={
-            <Button onClick={handleRefresh} size="small" type="ghost">
-              Refresh
-            </Button>
-          }
-        />
-      )}
-
+    <Create saveButtonProps={saveButtonProps}>
       <Form {...formProps} layout="vertical">
         <Form.Item
           label="Amount"
@@ -84,8 +43,9 @@ export const PaymentEdit: React.FC<IResourceComponentsProps> = () => {
             },
           ]}
         >
-          <Input />
+          <InputNumber min={1} max={10} />
         </Form.Item>
+
         <Form.Item
           label="Currency"
           name="currency"
@@ -144,29 +104,7 @@ export const PaymentEdit: React.FC<IResourceComponentsProps> = () => {
         >
           <Input />
         </Form.Item>
-        <Form.Item
-          label="Created At"
-          name="createdAt"
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <Input disabled />
-        </Form.Item>
-        <Form.Item
-          label="Updated At"
-          name="updatedAt"
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <Input disabled />
-        </Form.Item>
       </Form>
-    </Edit>
+    </Create>
   );
 };
