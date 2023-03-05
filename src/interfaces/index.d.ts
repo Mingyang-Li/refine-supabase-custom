@@ -11,3 +11,11 @@ export interface IPayment {
   archivedAt: Date;
   archived: boolean;
 }
+
+export type IStatus = "COMPLETED" | "PROCESSING" | "PENDING" | "FAILED";
+export type IStatusColor =
+  | "success"
+  | "processing"
+  | "error"
+  | "warning"
+  | "default";

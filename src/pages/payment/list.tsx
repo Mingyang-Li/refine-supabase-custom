@@ -7,16 +7,18 @@ import {
   Space,
   EditButton,
   getDefaultSortOrder,
+  Tag,
 } from "@pankod/refine-antd";
 
-import { IPayment } from "interfaces";
+import { IPayment, IStatus } from "interfaces";
+import { statusToColor, toReadableDate } from "utility/helpers";
 
 export const PaymentList: React.FC<IResourceComponentsProps> = () => {
   const { tableProps, sorter } = useTable<IPayment>({
     initialSorter: [
       {
-        field: "id",
-        order: "asc",
+        field: "updatedAt",
+        order: "desc",
       },
     ],
   });
@@ -37,16 +39,40 @@ export const PaymentList: React.FC<IResourceComponentsProps> = () => {
           dataIndex="currency"
           title="Currency"
           sorter
+          render={(value: string) => <Tag color="default">{value}</Tag>}
         />
         <Table.Column
           key="dateOfPayment"
           dataIndex="dateOfPayment"
           title="Date of Payment"
           sorter
+          render={(value: string) => toReadableDate(value)}
         />
         <Table.Column key="from" dataIndex="from" title="From" sorter />
         <Table.Column key="to" dataIndex="to" title="To" sorter />
-        <Table.Column key="status" dataIndex="status" title="Status" sorter />
+        <Table.Column
+          key="status"
+          dataIndex="status"
+          title="Status"
+          sorter
+          render={(value: IStatus) => (
+            <Tag color={statusToColor(value)}>{value}</Tag>
+          )}
+        />
+        <Table.Column
+          key="createdAt"
+          dataIndex="createdAt"
+          title="Created At"
+          sorter
+          render={(value: string) => toReadableDate(value)}
+        />
+        <Table.Column
+          key="updatedAt"
+          dataIndex="updatedAt"
+          title="Updated At"
+          sorter
+          render={(value: string) => toReadableDate(value)}
+        />
         <Table.Column<IPayment>
           title="Actions"
           dataIndex="actions"

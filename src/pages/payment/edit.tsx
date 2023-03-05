@@ -15,6 +15,12 @@ import {
 } from "@pankod/refine-antd";
 import { IPayment } from "interfaces";
 import dayjs from "dayjs";
+import { useQuery } from "@apollo/client";
+import {
+  UNIQUE_PAYMENT_CURRENCIES,
+  UNIQUE_PAYMENT_STATUSES,
+} from "graphql/queries";
+import { Query } from "generated/graphql";
 
 export const PaymentEdit: React.FC<IResourceComponentsProps> = () => {
   const [isDeprecated, setIsDeprecated] = useState(false);
@@ -24,6 +30,19 @@ export const PaymentEdit: React.FC<IResourceComponentsProps> = () => {
       setIsDeprecated(true);
     },
   });
+  const { data: currencies } = useQuery<Query>(UNIQUE_PAYMENT_CURRENCIES);
+  const { data: statuses } = useQuery<Query>(UNIQUE_PAYMENT_STATUSES);
+  const uniqueCurrencies = currencies?.uniquePaymentCurrencies.map((d) => ({
+    label: d.currency,
+    value: d.currency,
+  }));
+
+  const uniqueStatuses = statuses?.uniquePaymentStatuses.map((d) => ({
+    label: d.status,
+    value: d.status,
+  }));
+
+  console.log(statuses);
 
   const handleRefresh = () => {
     queryResult?.refetch();
@@ -78,18 +97,7 @@ export const PaymentEdit: React.FC<IResourceComponentsProps> = () => {
             },
           ]}
         >
-          <Select
-            options={[
-              {
-                label: "USD",
-                value: "USD",
-              },
-              {
-                label: "GBP",
-                value: "GBP",
-              },
-            ]}
-          />
+          <Select options={uniqueCurrencies} />
         </Form.Item>
         <Form.Item
           label="Date of payment"
@@ -104,6 +112,17 @@ export const PaymentEdit: React.FC<IResourceComponentsProps> = () => {
           })}
         >
           <DatePicker />
+        </Form.Item>
+        <Form.Item
+          label="Status"
+          name="status"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
+          <Select options={uniqueStatuses} />
         </Form.Item>
       </Form>
     </Edit>

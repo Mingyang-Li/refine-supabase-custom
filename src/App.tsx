@@ -11,46 +11,49 @@ import {
 import "@pankod/refine-antd/dist/reset.css";
 import routerProvider from "@pankod/refine-react-router-v6";
 import { dataProvider, liveProvider } from "@pankod/refine-supabase";
-import { supabaseClient } from "utility";
+import { ApolloProvider } from "@apollo/client";
+import { supabaseClient, apolloClient } from "utility";
 import authProvider from "./authProvider";
 import { PaymentEdit, PaymentList } from "pages/payment";
 
 function App() {
   return (
-    <Refine
-      notificationProvider={notificationProvider}
-      Layout={Layout}
-      ReadyPage={ReadyPage}
-      catchAll={<ErrorComponent />}
-      dataProvider={dataProvider(supabaseClient)}
-      liveProvider={liveProvider(supabaseClient)}
-      authProvider={authProvider}
-      resources={[
-        {
-          name: "Payment",
-          list: PaymentList,
-          edit: PaymentEdit,
-        },
-      ]}
-      routerProvider={{
-        ...routerProvider,
-        routes: [
+    <ApolloProvider client={apolloClient}>
+      <Refine
+        notificationProvider={notificationProvider}
+        Layout={Layout}
+        ReadyPage={ReadyPage}
+        catchAll={<ErrorComponent />}
+        dataProvider={dataProvider(supabaseClient)}
+        liveProvider={liveProvider(supabaseClient)}
+        authProvider={authProvider}
+        resources={[
           {
-            path: "/register",
-            element: <AuthPage type="register" />,
+            name: "Payment",
+            list: PaymentList,
+            edit: PaymentEdit,
           },
-          {
-            path: "/forgot-password",
-            element: <AuthPage type="forgotPassword" />,
-          },
-          {
-            path: "/update-password",
-            element: <AuthPage type="updatePassword" />,
-          },
-        ],
-      }}
-      LoginPage={() => <AuthPage type="login" />}
-    />
+        ]}
+        routerProvider={{
+          ...routerProvider,
+          routes: [
+            {
+              path: "/register",
+              element: <AuthPage type="register" />,
+            },
+            {
+              path: "/forgot-password",
+              element: <AuthPage type="forgotPassword" />,
+            },
+            {
+              path: "/update-password",
+              element: <AuthPage type="updatePassword" />,
+            },
+          ],
+        }}
+        LoginPage={() => <AuthPage type="login" />}
+      />
+    </ApolloProvider>
   );
 }
 
