@@ -15,6 +15,13 @@ import { statusToColor, toReadableDate } from "utility/helpers";
 
 export const PaymentList: React.FC<IResourceComponentsProps> = () => {
   const { tableProps, sorter } = useTable<IPayment>({
+    initialFilter: [
+      {
+        field: "archived",
+        value: false,
+        operator: "eq",
+      },
+    ],
     initialSorter: [
       {
         field: "updatedAt",
